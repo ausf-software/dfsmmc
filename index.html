@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<title>Finite state machine calculator</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap" rel="stylesheet">
+		<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+		
+		<link rel="icon" href="https://ausf-software.github.io/favicon.ico"> <!-- 32×32 -->
+		<link rel="icon" href="https://ausf-software.github.io/images/favicons/icon.svg" type="image/svg+xml">
+		<link rel="apple-touch-icon" href="https://ausf-software.github.io/images/favicons/apple.png">  <!-- 180×180 -->
+		<link rel="manifest" href="https://ausf-software.github.io/manifest.webmanifest">
+
+		<link rel="stylesheet" type="text/css" href="https://ausf-software.github.io/css/style.css">
+		<link rel="stylesheet" type="text/css" href="css/fsmmc.css">
+		
+		<meta name="viewport" content="width=device-width">
+		<meta name = "description" content = "" />
+		<meta name = "keywords" content = "finite state machine, finite state machine calculator, калькулятор, калькулятор конечных автоматов, конечный автомат" />
+		<meta name = "robots" content = "index,follow" />
+		<script type="text/javascript" src="https://ausf-software.github.io/js/script.js"></script>
+	</head>
+
+	<body>
+
+		<header id="header"></header>
+
+		<main>
+			<section>
+				<div class="calculator-settings">
+					<h1 class="calculator-text">Deterministic finite-state machine minimization calculator</label>
+					<div id="head" class="head">
+						<form>
+							<div class = "inputs">
+
+								<p><label class = "states-input">States: <input type="text" id="states-input" placeholder="A,B,C,..." onkeydown="if(event.keyCode==13){return false;}"></label>
+								<p><label class = "alphabet-input">Alphabet: <input type="text" id="alphabet-input" placeholder="a,b,c,..." onkeydown="if(event.keyCode==13){return false;}"></label>
+								<p><label class = "states-input">States: <input type="text" id="yes-states-input" placeholder="A,B,C,..." onkeydown="if(event.keyCode==13){return false;}"></label>
+								<p><label>
+										Start state: 
+										<select disabled id="start-state" name="start-state" class="form-select jquery-once-4-processed" tabindex="0">
+											<option value="0" selected="selected">- None -</option>
+										</select>
+									</label>
+								<div id = "transitions">
+									<p><label>Transition 1: 
+										<select disabled id="start-state1" class="form-select" tabindex="0">
+											<option value="0" selected="selected">- Start -</option>
+										</select>
+										<select disabled id="transition-char1" class="form-select" tabindex="0">
+											<option value="()" selected="selected">- Char -</option>
+										</select>
+										<select disabled id="end-state1" class="form-select" tabindex="0">
+											<option value="0" selected="selected">- End -</option>
+										</select>
+									</label>
+								</div>
+							</div>
+							<p><input type="button" id="add-transition" value="Add transition">
+								<input type="button" id="submit" value="Submit alphabet and states">
+								<input type="button" id="transitions-submit" value="Submit transitions and start state">
+								<input type="button" id="clear" value="Clear">
+						</form>
+					</div>
+				</div>
+			</section>
+			
+			<section class="answer_section">
+				<div class="container">
+				
+					<div class="answer_section_container">
+						<div class="answer_container" id="info">
+							<label id="info_selector" class="selector">&#9660; Readme</label>
+							<div id="info_div">
+								
+							</div>
+						</div>
+					</div>
+					
+					<div class="answer_section_container">
+						<div class="answer_container" id="table_answer">
+							<label id="answer_table_selector" class="selector">&#9660; Tables</label>
+							<div id="table_div">
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</section>
+		</main>
+
+		<script type="text/javascript" src="js/fsmmc.js"></script>
+		<script type="text/javascript" src="js/dfa.js"></script>
+		
+
+		<footer id="footer"></footer>
+		
+	</body>
+</html>

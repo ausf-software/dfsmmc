@@ -1,2 +1,2 @@
 # [Open web version](https://ausf-software.github.io/dfsmmc/)
-# Deterministic finite-state machine minimization  calculator
+# Deterministic finite-state machine minimization calculator
