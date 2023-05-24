@@ -1,3 +1,11 @@
+function getTransitionType(state, accepts, start) {
+	if (state == start) return "->";
+	for (var i = 0; i < accepts.length; i++) {
+		if (state == accepts[i]) return "*";
+	}
+	return "";
+}
+
 class DFA {
   constructor(states, alphabet, transition, start, accept) {
     this.states = states;
@@ -256,18 +264,14 @@ class DFA {
 
       if (equivalent) {
         equiv.equiv[i][j] = true;
-        table[i][j] = '  = ';
+        table[i][j] = '  + ';
       } else {
         table[i][j] = '    ';
       }
     }
   }
 
-	var res = "<p><table><thead><tr><th></th>";
-	for (var i = 0; i < states.length; i++) {
-		res += "<th>" + states[i] + "</th>";
-	}
-	res += "</tr></thead><tbody>"
+	var res = "<p><table><tbody>";
   for (let i = 0; i < states.length; i++) {
 	res += "<tr><th>";
     res += `${states[i]}`;
@@ -279,9 +283,37 @@ class DFA {
 
     res += "</tr>";
   }
+  res += "<tr><th></th>";
+  	for (var i = 0; i < states.length; i++) {
+		res += "<th>" + states[i] + "</th>";
+	}
+	res += "</tr>"
   res += "</tbody></table>";
   return res;
-}  
+}
+
+	dfaToHtmlString() {
+		var res = "<p><table><tr><th></th>";
+		for (var i = 0; i < this.alphabet.length; i++) {
+			res += "<th>" + this.alphabet[i] + "</th>";
+		}
+		res += "</tr></thead><tbody>"
+		console.log(this);
+		for (var i = 0; i < this.states.length; i++) {
+			res += "<tr><th>";
+			res += getTransitionType(this.states[i], this.accept, this.start) + this.states[i];
+			res += "</th>"
+		
+			for (var j = 0; j < this.alphabet.length; j++) {
+				res += "<th>" + this.transition[this.states[i]][this.alphabet[j]] + "</th>";
+			}
+		
+			res += "</tr>";
+		}
+		res += "</tbody></table>";
+		
+		return res;
+	}
 }
 
 var x = [
@@ -294,15 +326,16 @@ var x = [
 ["A", "B"]
 ];
 // Example usage:
-let dfa = new DFA(["A", "B", "C", "D", "E", "F", "G"], ['0', '1'], {
-  "A": { '0': "E", '1': "C" },
-  "B": { '0': "E", '1': "D" },
-  "C": { '0': "E", '1': "B" },
-  "D": { '0': "E", '1': "C" },
+let dfa = new DFA(["A", "B", "C", "D", "E", "F", "G"], ["0", "1"], {
+  "A": { '0': "E", "1": "C" },
+  "B": { '0': "E", "1": "D" },
+  "C": { '0': "E", "1": "B" },
+  "D": { '0': "E", "1": "C" },
   "E": { '0': "B", '1': "G" },
   "F": { '0': "A", '1': "D" },
   "G": { '0': "A", '1': "B" }
 }, "A", ["E", "F", "G"]);
+console.log(dfa);
 let minimizedDFA = dfa.minimize();
 console.log(minimizedDFA);
 //console.log(dfa.createEquivalenceTable([['A'], ['B', 'C'], ['D']]));

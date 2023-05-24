@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Finite state machine calculator</title>
+		<title>Deterministic finite-state machine minimization calculator</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
 		<link rel="stylesheet" type="text/css" href="css/fsmmc.css">
 		
 		<meta name="viewport" content="width=device-width">
-		<meta name = "description" content = "" />
+		<meta name = "description" content = "Minimization of a deterministic finite automaton (DFA) is the process of simplifying a given automaton by removing unreachable states and equivalent states. A state is called unreachable if it cannot be reached from the initial state. Such states can be removed from the DFA without any consequences for its behavior." />
 		<meta name = "keywords" content = "finite state machine, finite state machine calculator, калькулятор, калькулятор конечных автоматов, конечный автомат" />
 		<meta name = "robots" content = "index,follow" />
 		<script type="text/javascript" src="https://ausf-software.github.io/js/script.js"></script>
@@ -39,7 +39,7 @@
 
 								<p><label class = "states-input">States: <input type="text" id="states-input" placeholder="A,B,C,..." onkeydown="if(event.keyCode==13){return false;}"></label>
 								<p><label class = "alphabet-input">Alphabet: <input type="text" id="alphabet-input" placeholder="a,b,c,..." onkeydown="if(event.keyCode==13){return false;}"></label>
-								<p><label class = "states-input">States: <input type="text" id="yes-states-input" placeholder="A,B,C,..." onkeydown="if(event.keyCode==13){return false;}"></label>
+								<p><label class = "states-input">Admitting states: <input type="text" id="yes-states-input" placeholder="A,B,C,..." onkeydown="if(event.keyCode==13){return false;}"></label>
 								<p><label>
 										Start state: 
 										<select disabled id="start-state" name="start-state" class="form-select jquery-once-4-processed" tabindex="0">
@@ -60,10 +60,10 @@
 									</label>
 								</div>
 							</div>
-							<p><input type="button" id="add-transition" value="Add transition">
-								<input type="button" id="submit" value="Submit alphabet and states">
+							<p><input type="button" id="submit" value="Submit alphabet and states">
 								<input type="button" id="transitions-submit" value="Submit transitions and start state">
 								<input type="button" id="clear" value="Clear">
+								<input type="button" id="share" value="Share DFA">
 						</form>
 					</div>
 				</div>
@@ -76,15 +76,26 @@
 						<div class="answer_container" id="info">
 							<label id="info_selector" class="selector">&#9660; Readme</label>
 							<div id="info_div">
-								
+								<p class='answer'>Minimization of a deterministic finite automaton (DFA) is the process of simplifying a given automaton by removing unreachable states and equivalent states. 
+								<p class='answer'>A state is called unreachable if it cannot be reached from the initial state. Such states can be removed from the DFA without any consequences for its behavior.
+								<p class='answer'>States are equivalent if they are in the same equivalence class, that is, they have the same output symbols and reach the same states. Such states can be combined into one state, which will reduce the number of states in the automation and speed up its operation.
+								<p class='answer'>Minimizing the DFA allows you to get a more compact and faster machine without losing its functionality. This process is widely used in the field of compilers and programming languages to optimize operations with automata.
 							</div>
 						</div>
 					</div>
 					
 					<div class="answer_section_container">
 						<div class="answer_container" id="table_answer">
-							<label id="answer_table_selector" class="selector">&#9660; Tables</label>
+							<label id="answer_table_selector" class="selector">&#9660; Equivalence table</label>
 							<div id="table_div">
+							</div>
+						</div>
+					</div>
+					
+					<div class="answer_section_container">
+						<div class="answer_container" id="table_mini_answer">
+							<label id="answer_table_mini_selector" class="selector">&#9660; DFA table</label>
+							<div id="table_mini_div">
 							</div>
 						</div>
 					</div>
