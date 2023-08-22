@@ -1,4 +1,4 @@
-*,
+
 *:before,
 *:after {
   box-sizing: border-box;
@@ -42,6 +42,13 @@ select {
   }
 }
 
+.img_mini_div {
+	width: 100%;
+}
+
+.diagram {
+	width: 100%;
+}
 
 /**/
 

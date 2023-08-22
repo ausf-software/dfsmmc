@@ -13,9 +13,13 @@ var alphabet_selector = "";
 
 var url = window.location.href;
 
+var diaURL = "";
+
 setHide("info_div", "info_selector", "Readme");
 setHide("table_div", "answer_table_selector", "Equivalence table");
-setHide("table_div", "answer_table_mini_selector", "DFA table");
+setHide("table_mini_div", "answer_table_mini_selector", "Minimized DFA table");
+setHide("img_mini_div", "img_mini_selector", "Minimized DFA image");
+setHide("uml_code_div", "uml_code_selector", "UML code");
 
 var addTransition = function(){
 	if (submit) {
@@ -77,6 +81,18 @@ var submitFunc = function(){
 	}
 };
 
+function openURI(url) {
+    window.open(url, '_blank');
+}
+
+var openPNG = function(){
+	openURI("https://www.plantuml.com/plantuml/png/" + diaURL);
+}
+
+var openSVG = function(){
+	openURI("https://www.plantuml.com/plantuml/svg/" + diaURL);
+}
+
 var transitionSubFunc = function(){
 	var starts = [];
 	var _chars = [];
@@ -93,19 +109,43 @@ var transitionSubFunc = function(){
 	start_state = document.getElementById("start-state").value;
 	
 	for (var i = 0; i < count_trans; i++) {
-		if (starts[i].options[starts[i].selectedIndex].value != "0" && _chars[i].options[_chars[i].selectedIndex].value != "()" && ends[i].options[ends[i].selectedIndex].value != "0") {
+		transitions[new String(starts[i].value)] = {};
+	}
+	
+	for (var i = 0; i < count_trans; i++) {
+		if (starts[i].value != "0" && _chars[i].value != "()" && ends[i].value != "0") {
 			s++;
 		}
-		transitions[starts[i].options[starts[i].selectedIndex].value][_chars[i].options[_chars[i].selectedIndex].value] = ends[i].options[ends[i].selectedIndex].value;
+		transitions[new String(starts[i].value)][_chars[i].value[0]] = ends[i].value;
 	}
 
 	if (s == count_trans) {
 		var dfa = new DFA(states, alphabet, transitions, start_state, yes);
+		dfa.calculateEquivalenceTable();
 		var mini = dfa.minimize();
-		//table_mini_div
-		document.getElementById("table_mini_div").innerHTML += mini.dfaToHtmlString();
+		
+		document.getElementById("table_mini_div").innerHTML = mini.dfaToHtmlString();
 		var theDivText = document.getElementById("table_div");
-		theDivText.innerHTML += dfa.toHtmlEquivalenceTable();
+		theDivText.innerHTML = dfa.toHtmlEquivalenceTable();
+		
+		var theUML = document.getElementById("img_mini_div");
+		var umlString = mini.toUmlString();
+		
+		var theUML = document.getElementById("uml_code_div");
+		theUML.innerHTML = "<p class='answer'>" + umlString.replaceAll("\n", "<p class='answer'>");
+		
+		var dia = document.getElementById("diagram");
+		if (dia != null)
+			dia.remove();
+		
+		var img = document.createElement("img");
+		img.id = "diagram";
+		img.className = "diagram";
+		diaURL = compress2(umlString);
+		img.src = "https://www.plantuml.com/plantuml/svg/" + diaURL;
+		
+		document.getElementById("img_mini_div").innerHTML = "<p class='answer'>Generated on the PalntUML server (plantuml.com/plantuml/uml). " + "<input type='button' value='Open PNG' onclick='openPNG()'><input type='button' value='Open SVG' onclick='openSVG()'>";
+		document.getElementById("img_mini_div").appendChild(img);
 		
 		transition_submit = true;
 	} else {
@@ -153,6 +193,8 @@ function transitionToString() {
 }
 
 function parseDataUrl() {
+	var data = window.atob(url.split("?")[1]);
+	url = "https://ausf-software.github.io/dfsmmc/?" + data;
 	states = gup("states", url).split(",");
 	document.getElementById("states-input").value = gup("states", url);
 	
@@ -188,7 +230,7 @@ function parseDataUrl() {
 	
 }
 
-if (url.split("&").length > 1) {
+if (url.split("?").length > 1) {
 	parseDataUrl();
 }
 ////////////////////////////////////////////////////////
@@ -204,6 +246,13 @@ var clear = function(){
 	alphabet_selector = "";
 	document.getElementById("start-state").innerHTML = "<option value='0' selected='selected'>- None -</option>";
 	document.getElementById("transitions").innerHTML = "<p><label class>Transition " + count_trans + ": <select disabled id='start-state" + count_trans + "' tabindex='0'><option value='0' selected='selected'>- Start -</option></select><select disabled id='transition-char" + count_trans + "' tabindex='0'><option value='()' selected='selected'>- Char -</option></select><select disabled id='end-state" + count_trans + "' tabindex='0'><option value='0' selected='selected'>- End -</option></select></label>";
+	
+	document.getElementById("table_mini_div").innerHTML = "";
+	document.getElementById("img_mini_div").innerHTML = "";
+	var dia = document.getElementById("diagram");
+	if (dia != null)
+		dia.remove();
+	document.getElementById("uml_code_div").innerHTML = "";
 }
 
 document.getElementById("clear").onclick = clear;
@@ -245,8 +294,8 @@ function copyTextToClipboard(text) {
 
 document.getElementById("share").onclick = function(){
 	if (submit) {
-		var res = "https://ausf-software.github.io/dfsmmc/?";
-		
+		var result = "https://ausf-software.github.io/dfsmmc/?";
+		var res = "";
 		res += "start_state=" + start_state + "&";
 		
 		res += "states=";
@@ -274,7 +323,8 @@ document.getElementById("share").onclick = function(){
 		}
 		
 		res += "&" + transitionToString();
-		copyTextToClipboard(res);
+		result += window.btoa(res);
+		copyTextToClipboard(result);
 		alert("Link copied");
 	}
 }
@@ -292,7 +342,15 @@ document.getElementById("answer_table_selector").onclick = function(){
 }
 
 document.getElementById("answer_table_mini_selector").onclick = function(){
-	setHide("table_mini_div", "answer_table_mini_selector", "DFA table");
+	setHide("table_mini_div", "answer_table_mini_selector", "Minimized DFA table");
+}
+
+document.getElementById("img_mini_selector").onclick = function(){
+	setHide("img_mini_div", "img_mini_selector", "Minimized DFA image");
+}
+
+document.getElementById("uml_code_selector").onclick = function(){
+	setHide("uml_code_div", "uml_code_selector", "UML code");
 }
 
 function setHide(id, name, text) {
